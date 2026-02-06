@@ -1,0 +1,52 @@
+name: Generate App Icons
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-icons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install CairoSVG
+        run: |
+          python -m pip install --upgrade pip
+          pip install cairosvg
+
+      - name: Generate PNGs from SVG
+        run: |
+          python tools/generate_pngs.py
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Ensure flutter packages
+        run: |
+          flutter pub get
+
+      - name: Run flutter_launcher_icons
+        run: |
+          flutter pub run flutter_launcher_icons:main
+
+      - name: Commit generated icons
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/icons/generated || true
+          git add android/app/src/main/res || true
+          git add ios/Runner/Assets.xcassets || true
+          git commit -m "chore: generate app icons via workflow" || echo "No changes to commit"
+          git push origin HEAD:$(git rev-parse --abbrev-ref HEAD)

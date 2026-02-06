@@ -1,0 +1,54 @@
+name: Generate App Icons (Artifact)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-and-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install CairoSVG
+        run: |
+          python -m pip install --upgrade pip
+          pip install cairosvg
+
+      - name: Generate PNGs from SVG
+        run: |
+          python tools/generate_pngs.py
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Ensure flutter packages
+        run: flutter pub get
+
+      - name: Run flutter_launcher_icons
+        run: flutter pub run flutter_launcher_icons:main || true
+
+      - name: Collect generated files
+        run: |
+          mkdir -p out/icons
+          cp -r assets/icons/generated/* out/icons/ 2>/dev/null || true
+          cp -r android/app/src/main/res out/android-res 2>/dev/null || true
+          cp -r ios/Runner/Assets.xcassets out/ios-assets 2>/dev/null || true
+
+      - name: Create ZIP artifact
+        run: |
+          cd out
+          zip -r ../app-icons-artifact.zip . || true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-icons
+          path: app-icons-artifact.zip

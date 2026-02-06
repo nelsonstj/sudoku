@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Rounded background -->
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#6A1B9A" />
+      <stop offset="100%" stop-color="#4527A0" />
+    </linearGradient>
+  </defs>
+  <rect rx="160" ry="160" width="1024" height="1024" fill="url(#g)" />
+
+  <!-- 9-cell sudoku grid -->
+  <g transform="translate(120,120) scale(0.7)">
+    <rect x="0" y="0" width="704" height="704" fill="none" stroke="#FFFFFF" stroke-width="24" rx="36" />
+
+    <!-- thin internal lines -->
+    <g stroke="#FFFFFF" stroke-width="8">
+      <line x1="234.666" y1="0" x2="234.666" y2="704" />
+      <line x1="469.333" y1="0" x2="469.333" y2="704" />
+      <line x1="704" y1="234.666" x2="0" y2="234.666" />
+      <line x1="704" y1="469.333" x2="0" y2="469.333" />
+    </g>
+
+    <!-- bold 3x3 separators -->
+    <g stroke="#FFFFFF" stroke-width="20">
+      <line x1="0" y1="234.666" x2="704" y2="234.666" />
+      <line x1="0" y1="469.333" x2="704" y2="469.333" />
+      <line x1="234.666" y1="0" x2="234.666" y2="704" />
+      <line x1="469.333" y1="0" x2="469.333" y2="704" />
+    </g>
+
+    <!-- Sample numbers to indicate Sudoku (stylized) -->
+    <g fill="#FFFFFF" font-family="Segoe UI, Roboto, Arial" font-weight="700" font-size="96" text-anchor="middle">
+      <text x="117" y="160">3</text>
+      <text x="352" y="160">5</text>
+      <text x="587" y="160">1</text>
+
+      <text x="117" y="395">6</text>
+      <text x="352" y="395">8</text>
+      <text x="587" y="395">4</text>
+
+      <text x="117" y="630">9</text>
+      <text x="352" y="630">2</text>
+      <text x="587" y="630">7</text>
+    </g>
+
+    <!-- small accent circle -->
+    <circle cx="592" cy="592" r="48" fill="#FFB74D" opacity="0.95" />
+  </g>
+</svg>
