@@ -157,7 +157,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String statisticsGamesCompleted(Object completed, Object total) {
-    return 'Jogos concluídos: $completed / $total';
+    return 'Jogos: $completed / $total';
   }
 
   @override
