@@ -214,7 +214,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String gameTitlePkg(Object game, Object pkg) {
+  String gameTitlePkg(Object pkg, Object game) {
     return 'Pacote $pkg • Jogo $game';
   }
 
@@ -237,4 +237,34 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get difficultySpecial => 'Especial';
+
+  @override
+  String get gameCompleted => 'Parabéns!';
+
+  @override
+  String get menuInProgressGames => 'Jogos em Andamento';
+
+  @override
+  String get dialogInProgressGamesTitle => 'Jogos em Andamento';
+
+  @override
+  String get dialogNoInProgressGames => 'Nenhum jogo em andamento';
+
+  @override
+  String get dialogDeleteAllGames => 'Deletar todos os jogos';
+
+  @override
+  String get dialogDeleteConfirmAllGames => 'Deletar todos os jogos em andamento? Esta ação não pode ser desfeita.';
+
+  @override
+  String get dialogGameDeletedSuccess => 'Jogo deletado';
+
+  @override
+  String get dialogAllGamesDeletedSuccess => 'Todos os jogos foram deletados';
+
+  @override
+  String get dialogPackageLabel => 'Pacote';
+
+  @override
+  String get dialogGameLabel => 'Jogo';
 }

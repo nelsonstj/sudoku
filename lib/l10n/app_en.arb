@@ -66,5 +66,6 @@
   "difficultyEasy": "Easy",
   "difficultyMedium": "Medium",
   "difficultyHard": "Hard",
-  "difficultySpecial": "Special"
+  "difficultySpecial": "Special",
+  "gameCompleted": "Congratulations!"
 }

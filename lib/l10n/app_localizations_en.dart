@@ -214,7 +214,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String gameTitlePkg(Object game, Object pkg) {
+  String gameTitlePkg(Object pkg, Object game) {
     return 'Package $pkg • Game $game';
   }
 
@@ -237,4 +237,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get difficultySpecial => 'Special';
+
+  @override
+  String get gameCompleted => 'Congratulations!';
+
+  @override
+  String get menuInProgressGames => 'In Progress Games';
+
+  @override
+  String get dialogInProgressGamesTitle => 'In Progress Games';
+
+  @override
+  String get dialogNoInProgressGames => 'No in-progress games';
+
+  @override
+  String get dialogDeleteAllGames => 'Delete all games';
+
+  @override
+  String get dialogDeleteConfirmAllGames => 'Delete all in-progress games? This action cannot be undone.';
+
+  @override
+  String get dialogGameDeletedSuccess => 'Game deleted';
+
+  @override
+  String get dialogAllGamesDeletedSuccess => 'All games deleted';
+
+  @override
+  String get dialogPackageLabel => 'Package';
+
+  @override
+  String get dialogGameLabel => 'Game';
 }

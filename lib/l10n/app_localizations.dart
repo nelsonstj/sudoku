@@ -434,7 +434,7 @@ abstract class AppLocalizations {
   /// No description provided for @appFooter.
   ///
   /// In en, this message translates to:
-  /// **'v1.0.0 • Built by KN'**
+  /// **'Built by KN'**
   String get appFooter;
 
   /// No description provided for @gameTitle.
@@ -453,7 +453,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Package {pkg} • Game {game}'**
-  String gameTitlePkg(Object game, Object pkg);
+  String gameTitlePkg(Object pkg, Object game);
 
   /// No description provided for @selectorPackageDialog.
   ///
@@ -490,6 +490,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Special'**
   String get difficultySpecial;
+
+  /// No description provided for @gameCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations!'**
+  String get gameCompleted;
+
+  /// No description provided for @menuInProgressGames.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress Games'**
+  String get menuInProgressGames;
+
+  /// No description provided for @dialogInProgressGamesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress Games'**
+  String get dialogInProgressGamesTitle;
+
+  /// No description provided for @dialogNoInProgressGames.
+  ///
+  /// In en, this message translates to:
+  /// **'No in-progress games'**
+  String get dialogNoInProgressGames;
+
+  /// No description provided for @dialogDeleteAllGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all games'**
+  String get dialogDeleteAllGames;
+
+  /// No description provided for @dialogDeleteConfirmAllGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all in-progress games? This action cannot be undone.'**
+  String get dialogDeleteConfirmAllGames;
+
+  /// No description provided for @dialogGameDeletedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Game deleted'**
+  String get dialogGameDeletedSuccess;
+
+  /// No description provided for @dialogAllGamesDeletedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'All games deleted'**
+  String get dialogAllGamesDeletedSuccess;
+
+  /// No description provided for @dialogPackageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Package'**
+  String get dialogPackageLabel;
+
+  /// No description provided for @dialogGameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Game'**
+  String get dialogGameLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

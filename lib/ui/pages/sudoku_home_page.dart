@@ -7,6 +7,7 @@ import '../../providers/settings_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/sudoku_grid.dart';
 import '../widgets/number_pad.dart';
+import '../widgets/game_completion_curtain.dart';
 import 'dart:async';
 
 class SudokuHomePage extends ConsumerStatefulWidget {
@@ -21,7 +22,8 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
   int? selectedCol;
   int? selectedValue;
   Timer? _timer;
-  List<List<bool>>? _checkedConflicts;
+  OverlayEntry? _completionOverlay;
+  bool _manualConflictCheck = false; // Flag para saber se foi clicado em "Detectar erros"
 
   @override
   void initState() {
@@ -32,6 +34,7 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
   @override
   void dispose() {
     _timer?.cancel();
+    _completionOverlay?.remove();
     super.dispose();
   }
 
@@ -39,6 +42,13 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       final notifier = ref.read(sudokuNotifierProvider.notifier);
+      final state = ref.read(sudokuNotifierProvider);
+      // Parar o timer se o jogo foi concluído
+      if (state.currentGame?.isCompleted ?? false) {
+        _timer?.cancel();
+        _timer = null;
+        return;
+      }
       notifier.incrementElapsedTime();
     });
   }
@@ -46,18 +56,65 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    
+    // Listener único para detectar conclusão do jogo e mudanças
     ref.listen<SudokuState>(
       sudokuNotifierProvider,
       (previous, next) {
+        if (!mounted) return;
+        
         final prevCompleted = previous?.currentGame?.isCompleted ?? false;
         final nowCompleted = next.currentGame?.isCompleted ?? false;
-        if (!prevCompleted && nowCompleted && mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('🎉 Sudoku concluído! Parabéns!'),
-              duration: Duration(seconds: 3),
+        final prevGameId = '${previous?.currentGame?.difficulty}_p${previous?.currentGame?.packageNumber}_g${previous?.currentGame?.gameNumber}';
+        final nextGameId = '${next.currentGame?.difficulty}_p${next.currentGame?.packageNumber}_g${next.currentGame?.gameNumber}';
+        
+        // Detectar conclusão do jogo
+        if (!prevCompleted && nowCompleted) {
+          final time = next.currentGame?.puzzle.formattedElapsedTime ?? '00:00';
+          
+          // Remover overlay anterior se existir
+          _completionOverlay?.remove();
+          
+          // Criar nova entrada no overlay com a cortina
+          _completionOverlay = OverlayEntry(
+            builder: (context) => GameCompletionCurtain(
+              title: loc.gameCompleted,
+              time: time,
+              onComplete: () {
+                _completionOverlay = null;
+              },
             ),
           );
+          
+          // Inserir o overlay na tela
+          Overlay.of(context).insert(_completionOverlay!);
+        }
+        
+        // Se o jogo mudou ou foi reiniciado
+        if (prevGameId != nextGameId) {
+          setState(() {
+            selectedRow = null;
+            selectedCol = null;
+            selectedValue = null;
+            _manualConflictCheck = false;
+          });
+        }
+      },
+    );
+
+    // Listener para resetar _manualConflictCheck quando a detecção de erros é alterada
+    ref.listen<SettingsState>(
+      settingsProvider,
+      (previous, next) {
+        if (!mounted) return;
+        final wasRealtimeEnabled = previous?.realtimeErrorChecking ?? true;
+        final isRealtimeEnabled = next.realtimeErrorChecking;
+        
+        // Se foi desabilitada a detecção em tempo real, reseta a flag de verificação manual
+        if (wasRealtimeEnabled && !isRealtimeEnabled && _manualConflictCheck) {
+          setState(() {
+            _manualConflictCheck = false;
+          });
         }
       },
     );
@@ -81,22 +138,12 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
     }
 
     final SudokuPuzzle puzzle = game.puzzle;
-    // Update conflicts matrix in real-time if enabled
-    if (settings.realtimeErrorChecking && _checkedConflicts == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // Only update if realtime is enabled and user hasn't manually checked
-        if (mounted && settings.realtimeErrorChecking && _checkedConflicts == null) {
-          setState(() {
-            _checkedConflicts = notifier.getConflictsMatrix();
-          });
-        }
-      });
-    }
-    // Reset conflicts matrix when realtime is disabled
-    if (!settings.realtimeErrorChecking && _checkedConflicts != null) {
-      setState(() {
-        _checkedConflicts = null;
-      });
+    
+    // Determinar quais conflitos mostrar
+    // Se a detecção em tempo real está habilitada ou o usuário clicou em detectar erros
+    List<List<bool>>? conflictsToShow;
+    if (settings.realtimeErrorChecking || _manualConflictCheck) {
+      conflictsToShow = state.conflicts;
     }
     // Map difficulty to localized label (kept local mapping for values)
     // Localize difficulty label using generated localizations
@@ -135,7 +182,7 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
                   selectedRow = null;
                   selectedCol = null;
                   selectedValue = null;
-                  _checkedConflicts = null;
+                  _manualConflictCheck = false;
                 });
                 messenger.showSnackBar(SnackBar(content: Text(loc.actionUndone)));
               }
@@ -165,7 +212,7 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
                 selectedRow = null;
                 selectedCol = null;
                 selectedValue = null;
-                _checkedConflicts = null;
+                _manualConflictCheck = false;
               });
               messenger.showSnackBar(SnackBar(content: Text(loc.actionGameRestarted)));
             },
@@ -183,7 +230,9 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
                   final conflicts = notifier.getConflictsMatrix();
                   final count = conflicts.expand((r) => r).where((v) => v).length;
                   if (!mounted) return;
-                  setState(() { _checkedConflicts = conflicts; });
+                  setState(() { 
+                    _manualConflictCheck = true;
+                  });
                   if (count == 0) {
                     messenger.showSnackBar(SnackBar(content: Text(loc.actionNoErrorsFound)));
                   } else {
@@ -200,7 +249,7 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
                     setState(() {
                       selectedRow = hint['row'];
                       selectedCol = hint['col'];
-                      _checkedConflicts = null;
+                      _manualConflictCheck = false;
                     });
                     messenger.showSnackBar(SnackBar(content: Text(loc.actionHint('${hint['col']! + 1}', '${hint['row']! + 1}', '${hint['value']}'))));
                   }
@@ -214,7 +263,7 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
                     setState(() {
                       selectedRow = res['row'];
                       selectedCol = res['col'];
-                      _checkedConflicts = null;
+                      _manualConflictCheck = false;
                     });
                     messenger.showSnackBar(SnackBar(content: Text(loc.actionSolved('${res['row']! + 1}', '${res['col']! + 1}', '${res['value']}'))));
                   }
@@ -251,7 +300,7 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
                   if (confirmed != true) break;
                   final corrected = await notifier.autoCorrectCurrentGame();
                   if (!mounted) return;
-                  setState(() { _checkedConflicts = null; });
+                  setState(() { _manualConflictCheck = false; });
                   messenger.showSnackBar(SnackBar(content: Text(loc.actionCorrectedCells(corrected))));
                   break;
                 default:
@@ -316,14 +365,16 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
                             selectedValue: selectedRow != null && selectedCol != null
                                 ? puzzle.grid[selectedRow!][selectedCol!]
                                 : null,
-                            highlightedConflicts: _checkedConflicts,
+                            highlightedConflicts: conflictsToShow,
                             largerNumbers: settings.largerNumbers,
                             highlightRowCol: settings.highlightRowCol,
+                            isGameCompleted: game.isCompleted,
                             onCellTap: (r, c) {
+                              if (game.isCompleted) return;
                               setState(() {
                                 selectedRow = r;
                                 selectedCol = c;
-                                _checkedConflicts = null;
+                                _manualConflictCheck = false;
                               });
                             },
                           ),
@@ -338,12 +389,13 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
                           child: NumberPad(
+                            isGameCompleted: game.isCompleted,
                             onNumberSelected: (n) async {
                               if (selectedRow == null || selectedCol == null) return;
                               await notifier.setCell(selectedRow!, selectedCol!, n);
                               if (!mounted) return;
                               setState(() {
-                                _checkedConflicts = null;
+                                _manualConflictCheck = false;
                               });
                             },
                             onClear: () async {
@@ -351,7 +403,7 @@ class _SudokuHomePageState extends ConsumerState<SudokuHomePage> {
                               await notifier.clearCell(selectedRow!, selectedCol!);
                               if (!mounted) return;
                               setState(() {
-                                _checkedConflicts = null;
+                                _manualConflictCheck = false;
                               });
                             },
                           ),

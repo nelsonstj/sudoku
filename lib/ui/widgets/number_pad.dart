@@ -7,17 +7,22 @@ import '../../providers/sudoku_provider.dart';
 class NumberPad extends ConsumerWidget {
   final void Function(int) onNumberSelected;
   final VoidCallback onClear;
+  final bool isGameCompleted;
 
   const NumberPad({
     super.key,
     required this.onNumberSelected,
     required this.onClear,
+    this.isGameCompleted = false,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(sudokuNotifierProvider);
-    final puzzle = state.currentGame?.puzzle;
+    // Use selector para evitar rebuilds desnecessários - apenas rebuilda se o grid muda
+    final puzzle = ref.watch(
+      sudokuNotifierProvider.select((state) => state.currentGame?.puzzle),
+    );
+    
     final counts = List<int>.filled(10, 0);
     if (puzzle != null) {
       for (var r = 0; r < puzzle.grid.length; r++) {
@@ -45,19 +50,19 @@ class NumberPad extends ConsumerWidget {
             width: btnSize,
             height: btnSize,
             child: ElevatedButton(
-              onPressed: (puzzle == null || isComplete) ? null : () => onNumberSelected(n),
+              onPressed: (puzzle == null || isComplete || isGameCompleted) ? null : () => onNumberSelected(n),
               style: ElevatedButton.styleFrom(
-                backgroundColor: isComplete ? Colors.grey.shade300 : Colors.indigo.shade600,
+                backgroundColor: (isComplete || isGameCompleted) ? Colors.grey.shade300 : Colors.indigo.shade600,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                elevation: isComplete ? 0 : 2,
+                elevation: (isComplete || isGameCompleted) ? 0 : 2,
                 minimumSize: Size(btnSize, btnSize),
               ),
               child: Text(
                 '$n',
                 style: TextStyle(
                   fontSize: max(14, btnSize * 0.36),
-                  color: isComplete ? Colors.black54 : Colors.white,
+                  color: (isComplete || isGameCompleted) ? Colors.black54 : Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -70,14 +75,19 @@ class NumberPad extends ConsumerWidget {
             width: btnSize,
             height: btnSize,
             child: ElevatedButton(
-              onPressed: puzzle == null ? null : onClear,
+              onPressed: (puzzle == null || isGameCompleted) ? null : onClear,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent.shade400,
+                backgroundColor: (puzzle == null || isGameCompleted) ? Colors.grey.shade300 : Colors.redAccent.shade400,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 minimumSize: Size(btnSize, btnSize),
+                elevation: (puzzle == null || isGameCompleted) ? 0 : 2,
               ),
-              child: const Icon(Icons.backspace, color: Colors.white, size: 20),
+              child: Icon(
+                Icons.backspace,
+                color: (puzzle == null || isGameCompleted) ? Colors.black54 : Colors.white,
+                size: 20,
+              ),
             ),
           );
         }

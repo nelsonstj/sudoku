@@ -13,6 +13,7 @@ class SudokuGrid extends StatelessWidget {
   final List<List<bool>>? highlightedConflicts;
   final bool largerNumbers;
   final bool highlightRowCol;
+  final bool isGameCompleted;
 
   const SudokuGrid({
     super.key,
@@ -24,15 +25,16 @@ class SudokuGrid extends StatelessWidget {
     this.highlightedConflicts,
     this.largerNumbers = false,
     this.highlightRowCol = true,
+    this.isGameCompleted = false,
   });
 
   @override
   Widget build(BuildContext context) {
     // Use Column of 9 rows, each row 9 expanded cells to keep layout square-ish
     // Precompute conflicts so they are available when building cells
-    final selR = selectedRow;
-    final selC = selectedCol;
-    final selV = selectedValue;
+    final selR = isGameCompleted ? null : selectedRow;
+    final selC = isGameCompleted ? null : selectedCol;
+    final selV = isGameCompleted ? null : selectedValue;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     final conflicts = List.generate(9, (_) => List.filled(9, false));
@@ -51,28 +53,35 @@ class SudokuGrid extends StatelessWidget {
     }
 
     // Cores para alternar a cada box (3x3)
-    final boxColor1 = isDarkMode ? const Color(0xFF525252) : const Color(0xFFF0F0F0);
-    final boxColor2 = isDarkMode ? const Color(0xFF424242) : Colors.white;
+    // Cores especiais para jogo concluído em tema escuro
+    final boxColor1 = isGameCompleted && isDarkMode 
+        ? const Color(0xFF525752) 
+        : (isDarkMode ? const Color(0xFF525252) : const Color(0xFFF0F0F0));
+    final boxColor2 = isGameCompleted && isDarkMode 
+        ? const Color(0xFF525C52) 
+        : (isDarkMode ? const Color(0xFF424242) : Colors.white);
 
     return AspectRatio(
       aspectRatio: 1,
       child: Container(
         padding: const EdgeInsets.all(6),
-        color: isDarkMode ? Colors.grey[900] : Colors.grey[200],
+        color: isGameCompleted && isDarkMode 
+            ? const Color(0xFF525C52) 
+            : (isDarkMode ? Colors.grey[900] : Colors.grey[200]),
         child: Column(
           children: List.generate(9, (r) {
             return Expanded(
               child: Row(
                 children: List.generate(9, (c) {
-                  final isSelected = selectedRow == r && selectedCol == c;
-                  final isSameRow = highlightRowCol && selectedRow != null && selectedRow == r;
-                  final isSameCol = highlightRowCol && selectedCol != null && selectedCol == c;
+                  final isSelected = !isGameCompleted && selectedRow == r && selectedCol == c;
+                  final isSameRow = !isGameCompleted && highlightRowCol && selectedRow != null && selectedRow == r;
+                  final isSameCol = !isGameCompleted && highlightRowCol && selectedCol != null && selectedCol == c;
                   final value = puzzle.getCell(r, c);
                   final fixed = puzzle.isFixed(r, c);
-                  final isHighlighted = selectedValue != null && value == selectedValue && value != 0;
-                  final isConflict = (highlightedConflicts != null)
+                  final isHighlighted = !isGameCompleted && selectedValue != null && value == selectedValue && value != 0;
+                  final isConflict = !isGameCompleted && ((highlightedConflicts != null)
                     ? (highlightedConflicts![r][c])
-                    : conflicts[r][c];
+                    : conflicts[r][c]);
 
                   final border = Border(
                     top: BorderSide(width: r % 3 == 0 ? 2 : 0.6, color: Colors.black),
@@ -107,7 +116,7 @@ class SudokuGrid extends StatelessWidget {
 
                   return Expanded(
                     child: GestureDetector(
-                      onTap: () => onCellTap(r, c),
+                      onTap: isGameCompleted ? null : () => onCellTap(r, c),
                       child: Container(
                         decoration: BoxDecoration(
                           border: border,

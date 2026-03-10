@@ -373,12 +373,9 @@ class SudokuNotifier extends StateNotifier<SudokuState> {
     return conflicts;
   }
 
-  /// Retorna a matriz de conflitos do jogo atual (consulta configurações para checagem em tempo real)
+  /// Retorna a matriz de conflitos do jogo atual (sempre calcula de forma correta).
+  /// Esta função é usada tanto para detecção em tempo real quanto para verificação manual.
   List<List<bool>> getConflictsMatrix() {
-    final settings = ref.read(settingsProvider);
-    if (!settings.realtimeErrorChecking) {
-      return state.conflicts;
-    }
     return _computeConflictsFor(state.currentGame);
   }
 

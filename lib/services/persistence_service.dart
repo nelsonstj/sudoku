@@ -85,4 +85,13 @@ class PersistenceService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_highlightRowColKey, enabled);
   }
+
+  Future<void> deleteGame(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    final all = await loadAllGames();
+    all.remove(key);
+
+    final jsonStr = jsonEncode(all.map((k, v) => MapEntry(k, v.toJson())));
+    await prefs.setString(_gamesKey, jsonStr);
+  }
 }

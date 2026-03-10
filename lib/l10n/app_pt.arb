@@ -43,7 +43,7 @@
   "statisticsTitle": "Estatísticas",
   "statisticsNoGames": "Nenhum jogo registrado ainda.",
   "statisticsProgressByPackage": "Progresso por pacote:",
-  "statisticsGamesCompleted": "Jogos concluídos: {completed} / {total}",
+  "statisticsGamesCompleted": "Jogos: {completed} / {total}",
   "statisticsLastPlayed": "Último jogo: {date}",
   "statisticsTotalTime": "Tempo total geral",
   "versionPrefix": "Versão: {version}+{build}",
@@ -66,5 +66,6 @@
   "difficultyEasy": "Fácil",
   "difficultyMedium": "Médio",
   "difficultyHard": "Difícil",
-  "difficultySpecial": "Especial"
+  "difficultySpecial": "Especial",
+  "gameCompleted": "Parabéns!"
 }

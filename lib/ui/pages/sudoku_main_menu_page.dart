@@ -7,6 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../pages/sudoku_game_selector_page.dart';
 import '../pages/sudoku_statistics_page.dart';
 import '../pages/settings_page.dart';
+import '../dialogs/in_progress_games_dialog.dart';
 import 'sudoku_home_page.dart';
 import '../../providers/sudoku_provider.dart';
 import '../../l10n/app_localizations.dart';
@@ -169,27 +170,38 @@ class SudokuMainMenuPage extends ConsumerWidget {
                   });
 
                   final oldest = incomplete.first;
-                      final label = loc.selectorContinueLabel(oldest.gameNumber, oldest.packageNumber);
+                  final label = loc.selectorContinueLabel(oldest.gameNumber, oldest.packageNumber);
+                  
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        final notifier = ref.read(sudokuNotifierProvider.notifier);
-                        final navigator = Navigator.of(context);
-                        await notifier.loadOrCreateGame(
-                          difficulty: oldest.difficulty,
-                          packageNumber: oldest.packageNumber,
-                          gameNumber: oldest.gameNumber,
+                    child: GestureDetector(
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => InProgressGamesDialog(
+                            inProgressGames: incomplete,
+                          ),
                         );
-                        navigator.push(MaterialPageRoute(builder: (_) => const SudokuHomePage()));
                       },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          final notifier = ref.read(sudokuNotifierProvider.notifier);
+                          final navigator = Navigator.of(context);
+                          await notifier.loadOrCreateGame(
+                            difficulty: oldest.difficulty,
+                            packageNumber: oldest.packageNumber,
+                            gameNumber: oldest.gameNumber,
+                          );
+                          navigator.push(MaterialPageRoute(builder: (_) => const SudokuHomePage()));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                        ),
+                        icon: const Icon(Icons.play_circle_outline),
+                        label: Text(label),
                       ),
-                      icon: const Icon(Icons.play_circle_outline),
-                      label: Text(label),
                     ),
                   );
                 },
