@@ -30,7 +30,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settingsThemeDark => 'Escuro';
 
   @override
-  String get settingsUndoStack => 'Desfazer até...';
+  String get settingsUndoStack => 'Tamanho da pilha de desfazer';
 
   @override
   String get settingsErrorChecking => 'Detecção de Erros';
@@ -186,6 +186,27 @@ class AppLocalizationsPt extends AppLocalizations {
   String get menuShare => 'Compartilhar';
 
   @override
+  String get menuDonate => 'Doar';
+
+  @override
+  String get donateTitle => 'Apoie o Aplicativo';
+
+  @override
+  String get donateMessage => 'Ajude a apoiar o desenvolvimento deste app! Use PIX para fazer uma doação.';
+
+  @override
+  String get donatePixKey => 'Chave PIX';
+
+  @override
+  String get donateCopyButton => 'Copiar Chave PIX';
+
+  @override
+  String get donateCopied => 'Chave PIX copiada para a área de transferência!';
+
+  @override
+  String get menuExit => 'Sair';
+
+  @override
   String get menuCheckErrors => 'Checar erros';
 
   @override
@@ -214,7 +235,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String gameTitlePkg(Object pkg, Object game) {
+  String gameTitlePkg(Object game, Object pkg) {
     return 'Pacote $pkg • Jogo $game';
   }
 
@@ -225,6 +246,30 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get actionClose => 'Fechar';
+
+  @override
+  String get dialogInProgressGamesTitle => 'Jogos em Andamento';
+
+  @override
+  String get dialogNoInProgressGames => 'Nenhum jogo em andamento.';
+
+  @override
+  String get dialogPackageLabel => 'Pacote';
+
+  @override
+  String get dialogGameLabel => 'Jogo';
+
+  @override
+  String get dialogGameDeletedSuccess => 'Jogo deletado com sucesso.';
+
+  @override
+  String get dialogDeleteConfirmAllGames => 'Deletar todos os jogos em andamento? Esta ação não pode ser desfeita.';
+
+  @override
+  String get dialogAllGamesDeletedSuccess => 'Todos os jogos foram deletados com sucesso.';
+
+  @override
+  String get dialogDeleteAllGames => 'Deletar Todos os Jogos';
 
   @override
   String get difficultyEasy => 'Fácil';
@@ -240,31 +285,4 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get gameCompleted => 'Parabéns!';
-
-  @override
-  String get menuInProgressGames => 'Jogos em Andamento';
-
-  @override
-  String get dialogInProgressGamesTitle => 'Jogos em Andamento';
-
-  @override
-  String get dialogNoInProgressGames => 'Nenhum jogo em andamento';
-
-  @override
-  String get dialogDeleteAllGames => 'Deletar todos os jogos';
-
-  @override
-  String get dialogDeleteConfirmAllGames => 'Deletar todos os jogos em andamento? Esta ação não pode ser desfeita.';
-
-  @override
-  String get dialogGameDeletedSuccess => 'Jogo deletado';
-
-  @override
-  String get dialogAllGamesDeletedSuccess => 'Todos os jogos foram deletados';
-
-  @override
-  String get dialogPackageLabel => 'Pacote';
-
-  @override
-  String get dialogGameLabel => 'Jogo';
 }

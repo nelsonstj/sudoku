@@ -123,7 +123,10 @@ class _GameCompletionCurtainState extends State<GameCompletionCurtain>
             children: [
               const Text(
                 '🎉',
-                style: TextStyle(fontSize: 48),
+                style: TextStyle(
+                  fontSize: 48,
+                  decoration: TextDecoration.none
+                ),
               ),
               const SizedBox(height: 12),
               Text(
@@ -131,7 +134,8 @@ class _GameCompletionCurtainState extends State<GameCompletionCurtain>
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white
+                  color: Colors.white,
+                  decoration: TextDecoration.none,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -142,6 +146,7 @@ class _GameCompletionCurtainState extends State<GameCompletionCurtain>
                   fontSize: 18,
                   color: Colors.white70,
                   fontFeatures: [FontFeature.tabularFigures()],
+                  decoration: TextDecoration.none
                 ),
               ),
             ],

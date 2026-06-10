@@ -157,7 +157,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String statisticsGamesCompleted(Object completed, Object total) {
-    return 'Games: $completed / $total';
+    return 'Games completed: $completed / $total';
   }
 
   @override
@@ -184,6 +184,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuShare => 'Share';
+
+  @override
+  String get menuDonate => 'Donate';
+
+  @override
+  String get donateTitle => 'Support the App';
+
+  @override
+  String get donateMessage => 'Help support the development of this app! Use PIX to make a donation.';
+
+  @override
+  String get donatePixKey => 'PIX Key';
+
+  @override
+  String get donateCopyButton => 'Copy PIX Key';
+
+  @override
+  String get donateCopied => 'PIX key copied to clipboard!';
+
+  @override
+  String get menuExit => 'Exit';
 
   @override
   String get menuCheckErrors => 'Check errors';
@@ -214,7 +235,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String gameTitlePkg(Object pkg, Object game) {
+  String gameTitlePkg(Object game, Object pkg) {
     return 'Package $pkg • Game $game';
   }
 
@@ -225,6 +246,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get actionClose => 'Close';
+
+  @override
+  String get dialogInProgressGamesTitle => 'In Progress Games';
+
+  @override
+  String get dialogNoInProgressGames => 'No games in progress.';
+
+  @override
+  String get dialogPackageLabel => 'Package';
+
+  @override
+  String get dialogGameLabel => 'Game';
+
+  @override
+  String get dialogGameDeletedSuccess => 'Game deleted successfully.';
+
+  @override
+  String get dialogDeleteConfirmAllGames => 'Delete all games in progress? This action cannot be undone.';
+
+  @override
+  String get dialogAllGamesDeletedSuccess => 'All games deleted successfully.';
+
+  @override
+  String get dialogDeleteAllGames => 'Delete All Games';
 
   @override
   String get difficultyEasy => 'Easy';
@@ -240,31 +285,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gameCompleted => 'Congratulations!';
-
-  @override
-  String get menuInProgressGames => 'In Progress Games';
-
-  @override
-  String get dialogInProgressGamesTitle => 'In Progress Games';
-
-  @override
-  String get dialogNoInProgressGames => 'No in-progress games';
-
-  @override
-  String get dialogDeleteAllGames => 'Delete all games';
-
-  @override
-  String get dialogDeleteConfirmAllGames => 'Delete all in-progress games? This action cannot be undone.';
-
-  @override
-  String get dialogGameDeletedSuccess => 'Game deleted';
-
-  @override
-  String get dialogAllGamesDeletedSuccess => 'All games deleted';
-
-  @override
-  String get dialogPackageLabel => 'Package';
-
-  @override
-  String get dialogGameLabel => 'Game';
 }

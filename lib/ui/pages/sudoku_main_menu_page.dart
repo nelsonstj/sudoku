@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -52,6 +54,13 @@ class SudokuMainMenuPage extends ConsumerWidget {
                     );
                   }
                   break;
+                case 'donate':
+                  if (context.mounted) {
+                    _showDonateDialog(context, loc);
+                  }
+                  break;
+                case 'exit':
+                  exit(0);
               }
             },
             itemBuilder: (BuildContext context) => [
@@ -65,7 +74,6 @@ class SudokuMainMenuPage extends ConsumerWidget {
                   ],
                 ),
               ),
-              const PopupMenuDivider(),
               PopupMenuItem<String>(
                 value: 'statistics',
                 child: Row(
@@ -83,6 +91,28 @@ class SudokuMainMenuPage extends ConsumerWidget {
                     const Icon(Icons.settings, size: 20),
                     const SizedBox(width: 12),
                     Text(loc.menuSettings),
+                  ],
+                ),
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem<String>(
+                value: 'donate',
+                child: Row(
+                  children: [
+                    const Icon(Icons.favorite, size: 20),
+                    const SizedBox(width: 12),
+                    Text(loc.menuDonate),
+                  ],
+                ),
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem<String>(
+                value: 'exit',
+                child: Row(
+                  children: [
+                    const Icon(Icons.exit_to_app, size: 20),
+                    const SizedBox(width: 12),
+                    Text(loc.menuExit),
                   ],
                 ),
               ),
@@ -234,6 +264,75 @@ class SudokuMainMenuPage extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showDonateDialog(BuildContext context, AppLocalizations loc) {
+    const pixKey = 'e0477ba1-5d6e-489f-bf6f-d48cf78838fc'; // Chave PIX de exemplo
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(loc.donateTitle),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(loc.donateMessage),
+              const SizedBox(height: 20),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      loc.donatePixKey,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SelectableText(
+                      pixKey,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'monospace',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(loc.actionCancel),
+          ),
+          ElevatedButton.icon(
+            onPressed: () async {
+              await Clipboard.setData(const ClipboardData(text: pixKey));
+              if (context.mounted) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(loc.donateCopied)),
+                );
+              }
+            },
+            icon: const Icon(Icons.copy, size: 18),
+            label: Text(loc.donateCopyButton),
+          ),
+        ],
       ),
     );
   }

@@ -401,6 +401,48 @@ abstract class AppLocalizations {
   /// **'Share'**
   String get menuShare;
 
+  /// No description provided for @menuDonate.
+  ///
+  /// In en, this message translates to:
+  /// **'Donate'**
+  String get menuDonate;
+
+  /// No description provided for @donateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Support the App'**
+  String get donateTitle;
+
+  /// No description provided for @donateMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Help support the development of this app! Use PIX to make a donation.'**
+  String get donateMessage;
+
+  /// No description provided for @donatePixKey.
+  ///
+  /// In en, this message translates to:
+  /// **'PIX Key'**
+  String get donatePixKey;
+
+  /// No description provided for @donateCopyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy PIX Key'**
+  String get donateCopyButton;
+
+  /// No description provided for @donateCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'PIX key copied to clipboard!'**
+  String get donateCopied;
+
+  /// No description provided for @menuExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get menuExit;
+
   /// No description provided for @menuCheckErrors.
   ///
   /// In en, this message translates to:
@@ -453,7 +495,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Package {pkg} • Game {game}'**
-  String gameTitlePkg(Object pkg, Object game);
+  String gameTitlePkg(Object game, Object pkg);
 
   /// No description provided for @selectorPackageDialog.
   ///
@@ -466,6 +508,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get actionClose;
+
+  /// No description provided for @dialogInProgressGamesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress Games'**
+  String get dialogInProgressGamesTitle;
+
+  /// No description provided for @dialogNoInProgressGames.
+  ///
+  /// In en, this message translates to:
+  /// **'No games in progress.'**
+  String get dialogNoInProgressGames;
+
+  /// No description provided for @dialogPackageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Package'**
+  String get dialogPackageLabel;
+
+  /// No description provided for @dialogGameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Game'**
+  String get dialogGameLabel;
+
+  /// No description provided for @dialogGameDeletedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Game deleted successfully.'**
+  String get dialogGameDeletedSuccess;
+
+  /// No description provided for @dialogDeleteConfirmAllGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all games in progress? This action cannot be undone.'**
+  String get dialogDeleteConfirmAllGames;
+
+  /// No description provided for @dialogAllGamesDeletedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'All games deleted successfully.'**
+  String get dialogAllGamesDeletedSuccess;
+
+  /// No description provided for @dialogDeleteAllGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete All Games'**
+  String get dialogDeleteAllGames;
 
   /// No description provided for @difficultyEasy.
   ///
@@ -496,60 +586,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Congratulations!'**
   String get gameCompleted;
-
-  /// No description provided for @menuInProgressGames.
-  ///
-  /// In en, this message translates to:
-  /// **'In Progress Games'**
-  String get menuInProgressGames;
-
-  /// No description provided for @dialogInProgressGamesTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'In Progress Games'**
-  String get dialogInProgressGamesTitle;
-
-  /// No description provided for @dialogNoInProgressGames.
-  ///
-  /// In en, this message translates to:
-  /// **'No in-progress games'**
-  String get dialogNoInProgressGames;
-
-  /// No description provided for @dialogDeleteAllGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete all games'**
-  String get dialogDeleteAllGames;
-
-  /// No description provided for @dialogDeleteConfirmAllGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete all in-progress games? This action cannot be undone.'**
-  String get dialogDeleteConfirmAllGames;
-
-  /// No description provided for @dialogGameDeletedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Game deleted'**
-  String get dialogGameDeletedSuccess;
-
-  /// No description provided for @dialogAllGamesDeletedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'All games deleted'**
-  String get dialogAllGamesDeletedSuccess;
-
-  /// No description provided for @dialogPackageLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Package'**
-  String get dialogPackageLabel;
-
-  /// No description provided for @dialogGameLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Game'**
-  String get dialogGameLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
